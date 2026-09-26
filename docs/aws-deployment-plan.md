@@ -12,7 +12,6 @@ It is distinct from `docs/deployment.md`, `docs/testing.md`, and `docs/release-p
 
 A few things worth knowing before you start, because they shape decisions below:
 
-- **`AGENTS.md`'s scope note is stale.** It restricts work to `02-restaurant-waitlist/`, a directory that doesn't exist in this repo — everything (`backend/`, `docs/`, `e2e/`, `Makefile`, `docker-compose.yml`) lives at the repo root. The README's own history section explains why: this project was extracted from a larger monorepo ("Module 2 of the AI Dev Tools Zoomcamp coursework") into its own standalone repo, and `AGENTS.md` wasn't updated to match. Worth fixing `AGENTS.md` itself at some point so this doesn't trip up the next person (or agent) who reads it literally.
 - **No `.github/workflows/` exists.** There's nothing to migrate away from — Phase 5 is additive, not a replacement of an existing GitHub Actions setup.
 - **No `infra/` directory exists yet.** The README already anticipates it (§ "Immediate next step: AWS deployment") and says explicitly it doesn't exist yet — confirmed. Phase 4 creates it.
 - **No `/health` endpoint exists.** `make e2e` currently polls `GET /api/venue` as its readiness check. See § 4.1 for whether to keep using that or add a dedicated endpoint (short answer: add a dedicated one).
