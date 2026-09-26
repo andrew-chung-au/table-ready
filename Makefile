@@ -1,4 +1,4 @@
-.PHONY: help install run run-frontend dev test test-frontend test-backend test-one migration e2e
+.PHONY: help install run run-frontend dev test test-frontend test-backend test-one verify migration e2e
 
 help: ## List targets
 	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z0-9_ -]+:.*## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -28,6 +28,9 @@ test-one: ## Run one test file: make test-one FILE=tests/test_tables.py
 		frontend/*) cd frontend && bun test "./$(patsubst frontend/%,%,$(FILE))" ;; \
 		*) uv run pytest "$(FILE)" ;; \
 	esac
+
+verify: ## Run all verification gates: make verify [BASE=<commit>]
+	@bash .claude/skills/verify/check.sh $(BASE)
 
 migration: ## Create an Alembic migration: make migration MSG="add notes to tables"
 	@test -n "$(MSG)" || { echo 'Usage: make migration MSG="what changed"'; exit 1; }
