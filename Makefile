@@ -1,13 +1,20 @@
-.PHONY: run run-frontend dev test test-frontend test-backend e2e
+.PHONY: help install run run-frontend dev test test-frontend test-backend test-one migration e2e
 
-run:
+help: ## List targets
+	@awk 'BEGIN {FS = ":.*## "} /^[a-zA-Z0-9_ -]+:.*## / {printf "  %-20s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+install: ## Install backend and frontend dependencies
+	uv sync
+	cd frontend && bun install
+
+run: ## Apply migrations, then start the backend on port 8091
 	uv run alembic upgrade head
 	uv run uvicorn backend.main:app --reload --port 8091
 
-run-frontend dev:
+run-frontend dev: ## Start the frontend dev server
 	cd frontend && bun run dev
 
-test: test-frontend test-backend
+test: test-frontend test-backend ## Run frontend and backend unit tests
 
 test-frontend:
 	cd frontend && bun test
@@ -15,10 +22,21 @@ test-frontend:
 test-backend:
 	uv run pytest
 
+test-one: ## Run one test file: make test-one FILE=tests/test_tables.py
+	@test -n "$(FILE)" || { echo "Usage: make test-one FILE=path/to/test_file"; exit 1; }
+	@case "$(FILE)" in \
+		frontend/*) cd frontend && bun test "./$(patsubst frontend/%,%,$(FILE))" ;; \
+		*) uv run pytest "$(FILE)" ;; \
+	esac
+
+migration: ## Create an Alembic migration: make migration MSG="add notes to tables"
+	@test -n "$(MSG)" || { echo 'Usage: make migration MSG="what changed"'; exit 1; }
+	uv run alembic revision --autogenerate -m "$(MSG)"
+
 # Builds and starts the docker-compose.yml stack, waits for the app to
 # accept requests, runs the Playwright suite in e2e/ against it, then tears
 # the stack back down (even if the tests fail, so it doesn't leak containers).
-e2e:
+e2e: ## Run the Playwright suite against the docker-compose stack
 	docker compose up -d --build
 	@echo "Waiting for the app to become ready on http://localhost:8091..."
 	@i=0; until curl -sf http://localhost:8091/api/venue > /dev/null 2>&1; do \
