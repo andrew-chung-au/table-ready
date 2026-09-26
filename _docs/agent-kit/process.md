@@ -45,7 +45,7 @@ The main session is the orchestrator. It launches `pm`, `engineer` and `qa` and 
 
 1. Pick the next open issue. If there are none, build the backlog (see Backlog).
 2. `pm` grooms it. Never skip this step.
-3. `engineer` implements it and runs `verify`.
+3. `engineer` implements it and runs `verify`. A Stop hook also runs `make verify` whenever Claude tries to finish, and blocks it while verify fails.
 4. `qa` verifies it against the acceptance criteria.
 5. On FAIL, go back to step 3 with the QA comment as input.
 6. On PASS, if `engineer` proposed AGENTS.md changes, show them to the human as a diff. Apply them only after approval, in their own commit.
@@ -59,6 +59,7 @@ The main session is the orchestrator. It launches `pm`, `engineer` and `qa` and 
 - Commit messages say what changed and why.
 - Staging and pre-commit checks follow the Conventions in `AGENTS.md`.
 - Branching and pushing follow the **Branching** and **Push** settings in `AGENTS.md`.
+- Before approving a push, the human reads `git diff origin/main --stat`, then `git diff origin/main`, and asks about any changed file outside the issue's Constraints. A clean QA report is not proof of a clean diff.
 
 ## Definition of done
 
