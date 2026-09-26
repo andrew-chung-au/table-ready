@@ -1,10 +1,9 @@
-# Ignore contents of _session-summaries, not the folder
-_session-summaries/*
-!_session-summaries/.gitkeep
-
 # Frontend lockfile noise when using npm in a Bun-based project
 frontend/package-lock.json
 
-# Local SQLite database (backend/config.py DATABASE_URL default)
-backend/*.db
+# Local SQLite databases (default DATABASE_URL is ./waitlist.db)
 *.db
+
+# Python bytecode caches
+__pycache__/
+*.pyc
