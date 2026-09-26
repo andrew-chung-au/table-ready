@@ -1,8 +1,13 @@
 {
   "permissions": {
+    "deny": [
+      "Read(./**/.env)",
+      "Read(./**/.env.local)"
+    ],
     "ask": [
       "Edit(AGENTS.md)",
       "Edit(CLAUDE.md)",
+      "Edit(_docs/specs.md)",
       "Edit(.claude/**)",
       "Bash(git push:*)"
     ]
