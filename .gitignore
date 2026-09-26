@@ -7,3 +7,15 @@ frontend/package-lock.json
 # Python bytecode caches
 __pycache__/
 *.pyc
+
+# Claude hook state files
+.verify/
+
+# Personal Claude Code files
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Environment variables
+.env
+.env.*
+!.env.example
