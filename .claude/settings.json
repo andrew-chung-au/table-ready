@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "ask": [
+      "Edit(AGENTS.md)",
+      "Edit(CLAUDE.md)",
+      "Edit(.claude/**)",
+      "Bash(git push:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block_broad_git_add.py"
+          }
+        ]
+      }
+    ]
+  }
+}
