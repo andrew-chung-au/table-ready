@@ -65,7 +65,7 @@ None. Engineer stopped once by design on criterion 4 (lockfile URLs survived `bu
 
 ## Unrelated problems noticed but not fixed
 
-- Issue #4 ("Build the frontend in Docker with bun and its lockfile") overlaps #10's package-manager item; awaiting the human's decision on closing #4 as a duplicate.
+- Issue #4 ("Build the frontend in Docker with bun and its lockfile") overlapped #10's package-manager item; closed as a duplicate of #10 with the human's approval.
 - Gaps in the `tests/test_no_lovable.py` guard, judged minor by QA:
   - it skips folders named `dist` or `.output` at any depth;
   - it doesn't follow symlinks;
@@ -76,4 +76,4 @@ None. Engineer stopped once by design on criterion 4 (lockfile URLs survived `bu
 
 - The human reviews the diff (`git diff origin/main --stat -- .` plus the full diff) and pushes. Unpushed: `cecfca1`, `7b74d18`, and this summary.
 - #10 needs PM grooming before an Engineer starts. The PM filed it pre-groomed with approved scope; its open points are the `make e2e` system-install approval and the PM's grooming defaults (context under 10 MB, pinned bun image, `e2e/` staying on npm).
-- Open issues: #4, #6, #7, #8, #10.
+- Open issues: #6, #7, #8, #10.
