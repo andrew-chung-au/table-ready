@@ -1,4 +1,3 @@
-from typing import Optional
 
 from fastapi import APIRouter, Depends
 
@@ -21,11 +20,11 @@ router = APIRouter(tags=["waitlist-entries"])
 
 @router.get("/waitlist-entries", response_model=list[WaitlistEntry])
 def list_waitlist_entries(
-    status: Optional[str] = None,
-    partySizeClass: Optional[str] = None,
-    reviewRequiredOnly: Optional[bool] = None,
-    needsAttentionOnly: Optional[bool] = None,
-    serviceDate: Optional[str] = None,
+    status: str | None = None,
+    partySizeClass: str | None = None,
+    reviewRequiredOnly: bool | None = None,
+    needsAttentionOnly: bool | None = None,
+    serviceDate: str | None = None,
     repo: InMemoryRepository = Depends(get_repository),
     _staff: StaffSession = Depends(require_staff),
 ):

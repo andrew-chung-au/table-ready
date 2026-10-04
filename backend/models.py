@@ -4,7 +4,7 @@ Field names are camelCase to match `openapi.yaml` exactly, since these models
 double as the API response bodies for their respective entities.
 """
 
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
 
@@ -83,9 +83,9 @@ class Table(BaseModel):
     maxCapacity: int
     active: bool
     availabilityState: TableAvailabilityState
-    notes: Optional[str] = None
-    occupyingTicketCode: Optional[str] = None
-    occupyingEntryId: Optional[str] = None
+    notes: str | None = None
+    occupyingTicketCode: str | None = None
+    occupyingEntryId: str | None = None
 
 
 class WaitlistEntry(BaseModel):
@@ -102,20 +102,20 @@ class WaitlistEntry(BaseModel):
     originalPartyClass: PartySizeClass
     currentSeatingClass: PartySizeClass
     reviewRequired: bool
-    reviewReason: Optional[str] = None
+    reviewReason: str | None = None
     mobileNumber: str
-    seatingNote: Optional[str] = None
+    seatingNote: str | None = None
     status: WaitlistStatus
     arrivalTime: str
     estimatedWaitMinutes: int
-    notifiedAt: Optional[str] = None
-    returnByAt: Optional[str] = None
-    seatedAt: Optional[str] = None
-    completedAt: Optional[str] = None
-    cancelledAt: Optional[str] = None
-    tableId: Optional[str] = None
-    tableName: Optional[str] = None
-    seatingOverrideReason: Optional[str] = None
+    notifiedAt: str | None = None
+    returnByAt: str | None = None
+    seatedAt: str | None = None
+    completedAt: str | None = None
+    cancelledAt: str | None = None
+    tableId: str | None = None
+    tableName: str | None = None
+    seatingOverrideReason: str | None = None
     accessToken: str
 
 
@@ -128,7 +128,7 @@ class LargePartyEnquiry(BaseModel):
     guestName: str
     partySize: int
     mobileNumber: str
-    note: Optional[str] = None
+    note: str | None = None
     createdAt: str
     message: str
 
@@ -137,12 +137,12 @@ class Notification(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
-    entryId: Optional[str] = None
+    entryId: str | None = None
     recipientType: NotificationRecipientType
     channel: NotificationChannel
     templateType: NotificationTemplateType
     renderedMessage: str
     deliveryStatus: NotificationDeliveryStatus
     createdAt: str
-    sentAt: Optional[str] = None
-    errorMessage: Optional[str] = None
+    sentAt: str | None = None
+    errorMessage: str | None = None

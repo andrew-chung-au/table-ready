@@ -1,4 +1,3 @@
-from typing import Optional
 
 from fastapi import APIRouter, Depends
 
@@ -13,7 +12,7 @@ router = APIRouter(tags=["dashboard"])
 
 @router.get("/dashboard", response_model=DashboardData)
 def get_dashboard(
-    serviceDate: Optional[str] = None,
+    serviceDate: str | None = None,
     repo: InMemoryRepository = Depends(get_repository),
     _staff: StaffSession = Depends(require_staff),
 ):

@@ -3,7 +3,11 @@ from fastapi import APIRouter, Depends, Response
 from backend.deps import get_repository, require_staff
 from backend.models import StaffSession, Table
 from backend.repository import InMemoryRepository
-from backend.schemas import CreateTableRequest, SetTableAvailabilityRequest, UpdateTableRequest
+from backend.schemas import (
+    CreateTableRequest,
+    SetTableAvailabilityRequest,
+    UpdateTableRequest,
+)
 from backend.services import table_service
 
 router = APIRouter(tags=["tables"])

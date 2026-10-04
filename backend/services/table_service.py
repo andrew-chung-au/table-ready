@@ -1,7 +1,11 @@
 from backend.errors import ServiceError
 from backend.models import Table
 from backend.repository import InMemoryRepository
-from backend.schemas import CreateTableRequest, SetTableAvailabilityRequest, UpdateTableRequest
+from backend.schemas import (
+    CreateTableRequest,
+    SetTableAvailabilityRequest,
+    UpdateTableRequest,
+)
 
 
 def list_tables(repo: InMemoryRepository) -> list[Table]:

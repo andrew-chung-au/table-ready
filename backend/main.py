@@ -5,11 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+import backend.orm_models  # noqa: F401 -- registers ORM tables on Base.metadata
 from backend.config import ALLOWED_ORIGINS, DATABASE_URL, FRONTEND_DIST_DIR
 from backend.db import Base, make_engine, make_session_factory
 from backend.errors import ServiceError
 from backend.notifications import ConsoleNotificationProvider
-import backend.orm_models  # noqa: F401 -- registers ORM tables on Base.metadata
 from backend.repositories import seed_if_empty
 from backend.routers import (
     auth,

@@ -43,7 +43,7 @@ export class ApiServiceError extends Error {
 }
 
 function resolveBaseUrl(): string {
-  const configured = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
+  const configured = (import.meta.env["VITE_API_BASE_URL"] as string | undefined)?.trim();
   return (configured || DEFAULT_API_BASE_URL).replace(/\/+$/, "");
 }
 

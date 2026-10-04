@@ -9,7 +9,7 @@ import type { WaitlistService } from "./waitlistService";
  * FastAPI backend — see apiWaitlistService.ts for VITE_API_BASE_URL.
  */
 const useMock =
-  import.meta.env.MODE === "test" || import.meta.env.VITE_USE_MOCK_SERVICE === "true";
+  import.meta.env.MODE === "test" || import.meta.env["VITE_USE_MOCK_SERVICE"] === "true";
 
 /**
  * The single active service instance used by the whole app.

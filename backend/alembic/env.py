@@ -1,16 +1,15 @@
 import os
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
+
+from backend import orm_models  # noqa: F401
 
 # Import the app's declarative base and ORM models so their tables are
 # registered on `Base.metadata` before Alembic reads it, matching
 # `backend/db.py` and `backend/orm_models.py`.
 from backend.db import Base
-from backend import orm_models  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from backend.models import PartySizeClass, Table, WaitlistEntry, WaitlistStatus
 
@@ -17,7 +17,7 @@ STATUS_RANK: dict[WaitlistStatus, int] = {
 
 
 def now_utc() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def now_iso() -> str:

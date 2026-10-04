@@ -1,6 +1,6 @@
 """Request bodies and composite/derived response shapes (not persisted entities)."""
 
-from typing import Literal, Optional, Union
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -32,7 +32,7 @@ class CreateGuestEntryRequest(BaseModel):
     guestName: str
     partySize: int
     mobileNumber: str
-    seatingNote: Optional[str] = None
+    seatingNote: str | None = None
     policyAcknowledged: bool
 
 
@@ -54,11 +54,11 @@ class CreateGuestEntryResultClosed(BaseModel):
     message: str
 
 
-CreateGuestEntryResult = Union[
-    CreateGuestEntryResultEntry,
-    CreateGuestEntryResultLargePartyEnquiry,
-    CreateGuestEntryResultClosed,
-]
+CreateGuestEntryResult = (
+    CreateGuestEntryResultEntry
+    | CreateGuestEntryResultLargePartyEnquiry
+    | CreateGuestEntryResultClosed
+)
 
 
 class GuestStatus(BaseModel):
@@ -68,8 +68,8 @@ class GuestStatus(BaseModel):
     status: WaitlistStatus
     estimatedWaitMinutes: int
     message: str
-    notifiedAt: Optional[str] = None
-    returnByAt: Optional[str] = None
+    notifiedAt: str | None = None
+    returnByAt: str | None = None
     needsAttention: bool
     cancellationAllowed: bool
     venueName: str
@@ -79,7 +79,7 @@ class GuestStatus(BaseModel):
 
 class SeatEntryRequest(BaseModel):
     tableId: str
-    seatingOverrideReason: Optional[str] = None
+    seatingOverrideReason: str | None = None
 
 
 class ExtendReturnByRequest(BaseModel):
@@ -91,34 +91,34 @@ class UpdateWaitEstimateRequest(BaseModel):
 
 
 class PartialDefaultWaitEstimateMinutes(BaseModel):
-    A: Optional[int] = None
-    B: Optional[int] = None
-    C: Optional[int] = None
-    D: Optional[int] = None
+    A: int | None = None
+    B: int | None = None
+    C: int | None = None
+    D: int | None = None
 
 
 class PartialVenueMessageSettings(BaseModel):
-    joinMessage: Optional[str] = None
-    policyAcknowledgementMessage: Optional[str] = None
-    confirmationMessage: Optional[str] = None
-    tableReadyMessage: Optional[str] = None
-    cancellationMessage: Optional[str] = None
-    closedWaitlistMessage: Optional[str] = None
-    largePartyMessage: Optional[str] = None
-    largePartyConfirmationMessage: Optional[str] = None
+    joinMessage: str | None = None
+    policyAcknowledgementMessage: str | None = None
+    confirmationMessage: str | None = None
+    tableReadyMessage: str | None = None
+    cancellationMessage: str | None = None
+    closedWaitlistMessage: str | None = None
+    largePartyMessage: str | None = None
+    largePartyConfirmationMessage: str | None = None
 
 
 class UpdateVenueRequest(BaseModel):
-    name: Optional[str] = None
-    contactPhone: Optional[str] = None
-    staffNotificationEmail: Optional[str] = None
-    menuUrl: Optional[str] = None
-    maxOnlinePartySize: Optional[int] = None
-    gracePeriodMinutes: Optional[int] = None
-    entryMode: Optional[EntryMode] = None
-    waitlistOpen: Optional[bool] = None
-    defaultWaitEstimateMinutes: Optional[PartialDefaultWaitEstimateMinutes] = None
-    messages: Optional[PartialVenueMessageSettings] = None
+    name: str | None = None
+    contactPhone: str | None = None
+    staffNotificationEmail: str | None = None
+    menuUrl: str | None = None
+    maxOnlinePartySize: int | None = None
+    gracePeriodMinutes: int | None = None
+    entryMode: EntryMode | None = None
+    waitlistOpen: bool | None = None
+    defaultWaitEstimateMinutes: PartialDefaultWaitEstimateMinutes | None = None
+    messages: PartialVenueMessageSettings | None = None
 
 
 class NotificationResult(BaseModel):
@@ -130,7 +130,7 @@ class LargePartyEnquiryRequest(BaseModel):
     guestName: str
     partySize: int
     mobileNumber: str
-    note: Optional[str] = None
+    note: str | None = None
 
 
 class DashboardSummary(BaseModel):
@@ -152,15 +152,15 @@ class CreateTableRequest(BaseModel):
     name: str
     minCapacity: int = Field(ge=1)
     maxCapacity: int = Field(ge=1)
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class UpdateTableRequest(BaseModel):
-    name: Optional[str] = None
-    minCapacity: Optional[int] = Field(default=None, ge=1)
-    maxCapacity: Optional[int] = Field(default=None, ge=1)
-    active: Optional[bool] = None
-    notes: Optional[str] = None
+    name: str | None = None
+    minCapacity: int | None = Field(default=None, ge=1)
+    maxCapacity: int | None = Field(default=None, ge=1)
+    active: bool | None = None
+    notes: str | None = None
 
 
 class SetTableAvailabilityRequest(BaseModel):
@@ -168,7 +168,7 @@ class SetTableAvailabilityRequest(BaseModel):
 
 
 class CreateNotificationEventRequest(BaseModel):
-    entryId: Optional[str] = None
+    entryId: str | None = None
     recipientType: NotificationRecipientType
     channel: NotificationChannel
     templateType: NotificationTemplateType

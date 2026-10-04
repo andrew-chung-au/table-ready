@@ -31,3 +31,16 @@ markers = [
     "integration: needs Docker (docker-compose.yml stack); excluded from the default run",
 ]
 addopts = "-m 'not integration'"
+
+[tool.ruff.lint]
+# Explicit rule list so a ruff upgrade cannot silently change the enforced set (issue #3).
+select = ["E", "F", "UP", "I", "B"]
+# E501 (line length) is excluded: the tree predates the gate and enforcing the
+# default 88-char limit would reformat ~140 pre-existing lines, including the
+# protected hook scripts under _docs/agent-kit which this issue must not touch.
+ignore = ["E501"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's `Depends(...)` in argument defaults is the framework's intended
+# pattern, so B008 must not flag it (issue #3: configure, don't recode/noqa).
+extend-immutable-calls = ["fastapi.Depends"]
