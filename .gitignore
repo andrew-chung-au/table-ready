@@ -19,3 +19,9 @@ CLAUDE.local.md
 .env
 .env.*
 !.env.example
+.scratch/
+*.sqlite
+*.sqlite3
+*node_modules/*
+*.pem
+*.key

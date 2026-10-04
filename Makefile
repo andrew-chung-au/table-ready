@@ -30,7 +30,17 @@ test-one: ## Run one test file: make test-one FILE=tests/test_tables.py
 	esac
 
 verify: ## Run all verification gates: make verify [BASE=<commit>]
-	@bash .claude/skills/verify/check.sh $(BASE)
+	@bash _docs/agent-kit/scripts/verify.sh $(BASE)
+
+assert-clean: ## Fail if this folder has uncommitted changes (used after QA)
+	@bash _docs/agent-kit/scripts/assert-clean.sh
+
+hooks: ## Install the repo's git hooks (once per clone or codespace)
+	@bash _docs/agent-kit/scripts/install-hooks.sh
+
+clean-scratch: ## Empty .scratch/ at the end of an issue (refuses while a started process is running)
+	@for f in .scratch/*.pid; do if [ -f "$$f" ] && kill -0 "$$(cat "$$f")" 2>/dev/null; then echo "$$f: process $$(cat "$$f") is still running; stop it first"; exit 1; fi; done
+	@mkdir -p .scratch && find .scratch -mindepth 1 -delete && echo ".scratch/ is now empty"
 
 migration: ## Create an Alembic migration: make migration MSG="add notes to tables"
 	@test -n "$(MSG)" || { echo 'Usage: make migration MSG="what changed"'; exit 1; }
