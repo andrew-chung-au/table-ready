@@ -13,6 +13,8 @@ Layout: `backend/`, `frontend/`, `tests/`, `e2e/`, `_docs/`, `_session-summaries
 - **Run:** `make run` (backend on port 8091) and `make run-frontend`
 - **Test (all):** `make test`
 - **Test (one file):** `make test-one FILE=tests/test_tables.py` (paths under `frontend/` run with bun)
+- **Lint:** `make lint`
+- **Typecheck:** `make typecheck`
 - **Verify:** `make verify`: tests, whitespace and weakened-test checks. How to use it: `_docs/agent-kit/procedures/verify.md`.
 - **Assert clean:** `make assert-clean`: confirms nothing in this folder changed (used after QA).
 - **E2E:** `make e2e`. Starts and stops its own docker-compose stack. Needs Docker running and port 8091 free, so stop `make run` first.
