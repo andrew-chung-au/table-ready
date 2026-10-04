@@ -8,8 +8,7 @@ frontend/package-lock.json
 __pycache__/
 *.pyc
 
-# Claude hook state files
-.verify/
+
 
 # Personal Claude Code files
 CLAUDE.local.md
