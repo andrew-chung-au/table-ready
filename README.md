@@ -1,6 +1,6 @@
 # Table Ready
 
-This document is written for both human contributors and AI coding assistants picking up work in this repo — especially as the project moves into AWS deployment and CI/CD. Read this file first before making changes.
+This document is written for both human contributors and AI coding assistants picking up work in this repo. Read this file first before making changes.
 
 ## 1. Project overview
 
@@ -53,7 +53,7 @@ At runtime, `backend/main.py`'s `create_app()` mounts `frontend_dist/assets` as 
 ## 4. Project structure
 
 ```
-02-restaurant-waitlist/
+./
 ├── backend/                    # FastAPI app (Python, uv-managed)
 │   ├── main.py                 #   create_app(): CORS, routers, static SPA mount
 │   ├── config.py                #   env-driven config: DATABASE_URL, ALLOWED_ORIGINS, FRONTEND_DIST_DIR
@@ -90,10 +90,7 @@ At runtime, `backend/main.py`'s `create_app()` mounts `frontend_dist/assets` as 
 ├── openapi.yaml                  # API contract
 ├── _docs/                        # process, specs, task templates, team-role docs
 │   ├── specs.md                  #   full product specification
-│   ├── process.md                #   how work is organised (PM/Engineer/QA agent roles, git workflow)
-│   └── testing-guidelines.md, design-system.md — referenced by AGENTS.md as required reading before
-│                                  #   touching tests / UI, but do not currently exist in the tree; treat
-│                                  #   their absence as a gap to flag, not as "nothing to read"
+│   └── agent-kit/                #   agent workflow: process.md, team roles, procedures, scripts
 ├── _session-summaries/           # per-session engineering handover notes (one file per issue/step)
 ├── docs/                         # deployment.md, release-process.md, testing.md, ai-usage-report.md,
 │                                  #   operations-and-security-report.md — mostly placeholders today, being
@@ -103,7 +100,7 @@ At runtime, `backend/main.py`'s `create_app()` mounts `frontend_dist/assets` as 
                                     #   for Staging/Production are expected to land next (see §7)
 ```
 
-**AGENTS.md / CLAUDE.md** at this directory's root are binding project instructions for AI assistants working here — notably: work only within `02-restaurant-waitlist/`, never `git add .`/`git add -A`, never add a `pyproject.toml` dependency without asking, and read `_docs/testing-guidelines.md` before writing tests.
+**AGENTS.md** at this directory's root (mirrored by `CLAUDE.md`) holds binding project instructions for AI assistants working here — notably: run project commands through `make`, change only files the current task needs, stage explicit paths instead of `git add -A`, and ask before adding a dependency.
 
 ## 5. Testing strategy
 
@@ -119,13 +116,13 @@ All three are orchestrated by **`make e2e`**: brings up `docker compose up -d --
 
 ## 6. Local setup
 
-**Prerequisites:** `uv`, `bun`, Docker + Docker Compose.
+**Prerequisites:** `uv`, `bun`, Docker + Docker Compose. Install with `make install`.
 
 ### Fastest path — SQLite, no Docker
 
 ```bash
 make run              # applies `alembic upgrade head` against a local SQLite file, then starts uvicorn on :8091
-cd frontend && bun run dev   # Vite dev server on :8080, proxying API calls to :8091 via CORS
+make run-frontend     # Vite dev server on :8080, talking to the API on :8091 via CORS
 ```
 
 Open `http://localhost:8080`.
@@ -141,10 +138,10 @@ The `app` container serves both the API and the built frontend from `http://loca
 ### Running the test suites
 
 ```bash
-uv run pytest                              # backend unit tests (fast, no Docker)
+make test                                  # frontend (bun) + backend (pytest) unit tests together
+uv run pytest                              # backend unit tests only (fast, no Docker)
 uv run pytest tests/integration -m integration   # backend-vs-real-Postgres (needs Docker)
-cd frontend && bun test                    # frontend unit tests
-make test                                  # frontend + backend unit tests together
+make test-one FILE=tests/test_tables.py    # one file (paths under frontend/ run with bun)
 make e2e                                   # full compose stack + Playwright e2e suite (needs Docker)
 ```
 
@@ -152,7 +149,7 @@ make e2e                                   # full compose stack + Playwright e2e
 
 ```bash
 # Write a new migration after changing backend/orm_models.py:
-uv run alembic revision --autogenerate -m "describe the change"
+make migration MSG="describe the change"
 # Review the generated script in backend/alembic/versions/ before committing — autogenerate is a draft, not gospel.
 
 # Apply migrations locally:
@@ -176,4 +173,15 @@ This app started as Module 2 of the AI Dev Tools Zoomcamp coursework and has sin
 - Decide how the single Docker image (§2) maps onto AWS compute (ECS/Fargate is the natural fit given the existing container-first design; no infra code exists yet to confirm this).
 - Replace the local Compose Postgres with a managed RDS instance per environment, and point `DATABASE_URL` at it — the app and Alembic already only depend on that one environment variable, by design.
 - Wire `alembic upgrade head` into the deploy pipeline the same way `docker-compose.yml`'s `migrate` service does locally (run-once-before-app-starts), rather than inventing a new pattern.
-- Check `docs/deployment.md`, `docs/release-process.md`, and `_docs/process.md` — several are currently near-empty placeholders being filled in as this work lands, but are the intended home for deployment/runbook documentation going forward.
+- Check `docs/deployment.md`, `docs/release-process.md`, and `_docs/agent-kit/process.md` — the first two are currently near-empty placeholders being filled in as this work lands, but are the intended home for deployment/runbook documentation going forward.
+
+## 8. How this project is built (AI-assisted)
+
+Contributors — human or AI — start by reading `AGENTS.md` at the repo root. Work moves one GitHub issue at a time, following `_docs/agent-kit/process.md`. The `pm`, `engineer`, and `qa` roles are defined in `_docs/agent-kit/team/`. No change is finished until `make verify` passes (see `_docs/agent-kit/procedures/verify.md`). Commits touching protected files need `HUMAN_APPROVED=1`, only the human pushes, and decisions follow `_docs/agent-kit/procedures/asking-the-human.md`. Each issue leaves an engineering handover note in `_session-summaries/`; an early snapshot of the frontend prototype is kept as history in `docs/ai-usage-report.md`.
+
+- [`AGENTS.md`](AGENTS.md) — project instructions every contributor reads first
+- [`_docs/agent-kit/process.md`](_docs/agent-kit/process.md) — how work moves from issue to done
+- [`_docs/agent-kit/team/`](_docs/agent-kit/team/) — `pm.md`, `software-engineer.md`, `qa-engineer.md` role definitions
+- [`_docs/agent-kit/procedures/verify.md`](_docs/agent-kit/procedures/verify.md) — the `make verify` gate
+- [`_docs/agent-kit/procedures/asking-the-human.md`](_docs/agent-kit/procedures/asking-the-human.md) — approvals and decisions
+- [`_session-summaries/`](_session-summaries/) — per-issue engineering handover notes
