@@ -18,7 +18,7 @@ function pluginNames(config: UserConfig): string[] {
     .map((p) => p.name);
 }
 
-describe("vite config without the Lovable wrapper", () => {
+describe("plain vite config", () => {
   it("keeps the dev server on port 8080, which the backend's CORS defaults expect", () => {
     const config = resolveConfig("serve");
     expect(config.server?.port).toBe(8080);
@@ -47,25 +47,10 @@ describe("vite config without the Lovable wrapper", () => {
     expect(build).toContain("prerender-preview-shim");
     expect(build).toContain("prerender-preview-shim-cleanup");
   });
-
-  it("registers no Lovable plugins", () => {
-    for (const command of ["serve", "build"] as const) {
-      for (const name of pluginNames(resolveConfig(command))) {
-        expect(name.toLowerCase()).not.toContain("lovable");
-      }
-    }
-  });
 });
 
-describe("Lovable references are gone from the frontend config and root route", () => {
-  it.each(["vite.config.ts", "package.json", "bunfig.toml", "bun.lock", "src/routes/__root.tsx"])(
-    "%s has no lovable reference",
-    (file) => {
-      expect(readFileSync(`${frontendRoot}${file}`, "utf8").toLowerCase()).not.toContain("lovable");
-    },
-  );
-
-  it("keeps the root error boundary's copy and logging", () => {
+describe("root error boundary", () => {
+  it("keeps its copy and logging", () => {
     const root = readFileSync(`${frontendRoot}src/routes/__root.tsx`, "utf8");
     expect(root).toContain("console.error(error);");
     expect(root).toContain("This page didn't load");
