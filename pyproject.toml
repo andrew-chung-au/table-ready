@@ -1,7 +1,7 @@
 [project]
 name = "restaurant-waitlist-backend"
 version = "0.1.0"
-description = "FastAPI backend (in-memory store) for the Table Ready restaurant waitlist app."
+description = "FastAPI backend for the Table Ready restaurant waitlist app: SQLite + PostgreSQL via SQLAlchemy, migrations with Alembic."
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "fastapi>=0.115",
